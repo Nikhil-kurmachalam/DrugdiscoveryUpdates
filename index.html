@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PipelineIQ — Drug Discovery RSS Hub</title>
+  <script type="module" defer src="./app.js"></script>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b1020;color:#e6ecff;margin:0}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .card{background:#111937;border:1px solid #273163;border-radius:10px;padding:12px;margin:10px 0}
+    select,input,button{background:#0f1735;color:#fff;border:1px solid #334282;border-radius:8px;padding:8px}
+    button{cursor:pointer}
+    .pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#24326f;margin-right:6px;font-size:12px}
+    a{color:#8dc1ff}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>PipelineIQ — Drug Discovery RSS Hub</h1>
+    <p>Frontend-only curated feed using RSS + AI classification.</p>
+
+    <div class="row">
+      <select id="stageFilter"><option value="">All Stages</option></select>
+      <input id="diseaseFilter" placeholder="Filter disease (e.g., Alzheimers)" />
+      <select id="sigFilter">
+        <option value="">All Significance</option>
+        <option>High</option><option>Medium</option><option>Low</option>
+      </select>
+      <button id="refreshBtn">Refresh RSS + AI</button>
+      <a href="#admin">Admin</a>
+    </div>
+
+    <section id="feed"></section>
+
+    <section id="admin" class="hidden">
+      <h2>Professor Review</h2>
+      <input id="adminPassword" type="password" placeholder="Admin password" />
+      <button id="unlockAdmin">Unlock</button>
+      <div id="adminPanel" class="hidden"></div>
+    </section>
+  </div>
+</body>
+</html>
