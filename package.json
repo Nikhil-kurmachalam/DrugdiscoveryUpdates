@@ -1,5 +1,6 @@
 {
   "name": "pipelineiq-rss-hub",
+<<<<<<< codex/implement-pipelineiq-rss-hub-with-ai-zdk616
   "version": "0.2.0",
   "private": true,
   "scripts": {
@@ -19,5 +20,11 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@types/node": "22.8.7"
+=======
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "check": "node --check app.js && node --check prompt.js"
+>>>>>>> main
   }
 }
