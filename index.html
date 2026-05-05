@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drug Discovery Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script type="module" defer src="./app.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* ── CSS variables by theme ── */
+    :root, [data-theme="dark"] {
+      --page-bg:       #060d1b;
+      --header-bg:     linear-gradient(135deg,#07102a 0%,#120828 50%,#081428 100%);
+      --header-border: rgba(99,102,241,0.25);
+      --header-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --card-bg:       #0c1428;
+      --card-border:   #182044;
+      --surface-bg:    #0f1935;
+      --surface-border:#1e3058;
+      --input-bg:      #060d1b;
+      --title-color:   #ffffff;
+      --title-shadow:  0 0 30px rgba(129,140,248,0.6);
+      --subtitle:      #6b7fa8;
+      --text-1:        #eef2ff;
+      --text-2:        #7c8db5;
+      --text-muted:    #2d3d5a;
+      --skeleton:      #182044;
+      --pill-border:   #1e3058;
+      --pill-text:     #4a5a8a;
+      --pill-bg:       transparent;
+      --stat-bg:       #0c1428;
+      --stat-border:   #182044;
+      --stat-muted:    #334166;
+      --stage-bg:      #111d38;
+      --stage-text:    #4a5a8a;
+      --refresh-from:  #6366f1;
+      --refresh-to:    #8b5cf6;
+      --link:          #38bdf8;
+      --btn-secondary: rgba(255,255,255,0.05);
+      --toggle-text:   #7c8db5;
+      --empty:         #2d3d5a;
+      --card-shadow:   none;
+      --settings-bg:   #0f1935;
+    }
+
+    [data-theme="light"] {
+      --page-bg:       #f4f7ff;
+      --header-bg:     linear-gradient(135deg,#ffffff 0%,#eff3ff 60%,#f5f0ff 100%);
+      --header-border: #dde4f5;
+      --header-shadow: 0 2px 12px rgba(99,102,241,0.07);
+      --card-bg:       #ffffff;
+      --card-border:   #e2e8f5;
+      --surface-bg:    #f8faff;
+      --surface-border:#dde4f5;
+      --input-bg:      #ffffff;
+      --title-color:   #1e3a8a;
+      --title-shadow:  none;
+      --subtitle:      #64748b;
+      --text-1:        #0f172a;
+      --text-2:        #475569;
+      --text-muted:    #94a3b8;
+      --skeleton:      #e2e8f5;
+      --pill-border:   #dde4f5;
+      --pill-text:     #94a3b8;
+      --pill-bg:       #f8faff;
+      --stat-bg:       #ffffff;
+      --stat-border:   #e2e8f5;
+      --stat-muted:    #94a3b8;
+      --stage-bg:      #f1f5f9;
+      --stage-text:    #64748b;
+      --refresh-from:  #4f46e5;
+      --refresh-to:    #7c3aed;
+      --link:          #2563eb;
+      --btn-secondary: rgba(0,0,0,0.03);
+      --toggle-text:   #64748b;
+      --empty:         #94a3b8;
+      --card-shadow:   0 1px 6px rgba(0,0,0,0.05);
+      --settings-bg:   #f8faff;
+    }
+
+    body {
+      font-family: 'Inter','Segoe UI',Arial,sans-serif;
+      background: var(--page-bg);
+      color: var(--text-1);
+      margin: 0;
+      transition: background 0.3s, color 0.2s;
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { font-family: inherit; cursor: pointer; transition: opacity 0.15s; }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--header-border);
+      box-shadow: var(--header-shadow);
+      padding: 20px 0 18px;
+      margin-bottom: 32px;
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 28px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-icon {
+      width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
+      background: linear-gradient(135deg,#6366f1,#8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; box-shadow: 0 0 18px rgba(99,102,241,0.5);
+    }
+    .site-title {
+      margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.3px;
+      color: var(--title-color);
+      text-shadow: var(--title-shadow);
+    }
+    .site-sub { margin: 3px 0 0; color: var(--subtitle); font-size: 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    /* ── Keyframe animations ── */
+    @keyframes dd-bar  { 0%{width:5%} 40%{width:60%} 70%{width:80%} 100%{width:95%} }
+    @keyframes dd-spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    @keyframes dd-fade { 0%{opacity:0;transform:translateY(-4px)} 100%{opacity:1;transform:translateY(0)} }
+
+    /* ── Progress bar ── */
+    #loading-bar { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9999; display: none; }
+    #loading-bar-fill { height: 100%; background: linear-gradient(90deg,#6366f1,#8b5cf6,#38bdf8); animation: dd-bar 12s ease-out forwards; border-radius: 0 2px 2px 0; }
+    #loading-spinner { width: 16px; height: 16px; border: 2px solid rgba(129,140,248,0.25); border-top-color: #818cf8; border-radius: 50%; animation: dd-spin 0.8s linear infinite; flex-shrink: 0; display: none; }
+    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    /* ── Buttons ── */
+    #refreshBtn {
+      background: linear-gradient(135deg, var(--refresh-from), var(--refresh-to));
+      border: none; border-radius: 8px; padding: 8px 18px;
+      color: #fff; font-size: 12px; font-weight: 700;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+    }
+    #refreshBtn:disabled { opacity: 0.6; cursor: default; box-shadow: none; }
+
+    #settingsBtn, #themeToggle {
+      background: var(--btn-secondary);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px; padding: 7px 13px;
+      color: var(--toggle-text); font-size: 12px; font-weight: 600;
+    }
+    #settingsBtn.key-saved { border-color: #22c55e55; color: #22c55e; }
+
+    /* ── Status badge ── */
+    #status-bar {
+      font-size: 12px; color: #818cf8;
+      background: rgba(129,140,248,0.1); border: 1px solid rgba(129,140,248,0.25);
+      border-radius: 999px; padding: 4px 13px; display: none;
+    }
+
+    /* ── Settings panel ── */
+    #settings-panel {
+      background: var(--settings-bg); border: 1px solid var(--surface-border);
+      border-radius: 14px; padding: 18px 20px; margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
+    }
+    #settings-panel label { display: block; margin-bottom: 10px; color: var(--text-2); font-size: 13px; font-weight: 600; }
+    #settings-panel .row  { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    #settings-panel p     { margin: 8px 0 0; color: var(--text-muted); font-size: 11px; }
+    .inp {
+      background: var(--input-bg); border: 1px solid var(--surface-border); border-radius: 8px;
+      padding: 7px 11px; color: var(--text-1); font-size: 13px; font-family: inherit; outline: none;
+    }
+    #apiKeyInput { width: 300px; max-width: 100%; }
+    #saveKey  { background: linear-gradient(135deg,#4f46e5,#7c3aed); border: none; border-radius: 8px; padding: 8px 16px; color: #fff; font-size: 12px; font-weight: 600; }
+    #clearKey { background: var(--stage-bg); border: none; border-radius: 8px; padding: 8px 14px; color: var(--text-2); font-size: 12px; }
+    #key-status { font-size: 12px; margin-left: 6px; }
+    #key-status.set   { color: #22c55e; }
+    #key-status.unset { color: var(--text-muted); }
+
+    /* ── Source / sig chips ── */
+    #source-bar { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+    .src-btn, .sig-btn {
+      padding: 5px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--pill-border);
+      background: var(--pill-bg); color: var(--pill-text);
+      transition: all 0.15s;
+    }
+    .src-btn.active { border-color: var(--src-color); background: color-mix(in srgb, var(--src-color) 14%, transparent); color: var(--src-color); }
+    .sig-btn.active { border-color: var(--sig-color); background: color-mix(in srgb, var(--sig-color) 14%, transparent); color: var(--sig-color); }
+
+    /* ── Filter row ── */
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+    .sig-btns { display: flex; gap: 6px; }
+
+    /* ── Stats ── */
+    #stats-bar { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .stat-box {
+      background: var(--stat-bg); border: 1px solid var(--stat-border);
+      border-radius: 12px; padding: 10px 20px; text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .stat-num   { font-size: 22px; font-weight: 800; line-height: 1; }
+    .stat-label { font-size: 10px; color: var(--stat-muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ── Cards ── */
+    #feed article {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 16px 20px; margin-bottom: 12px;
+      box-shadow: var(--card-shadow);
+    }
+    #feed h3 { margin: 0 0 8px; font-size: 15px; font-weight: 700; color: var(--text-1); line-height: 1.45; }
+    #feed p  { margin: 0 0 12px; font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    /* ── Wrap ── */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px 56px; }
+
+    /* ── Stages info panel ── */
+    #stages-panel {
+      background: var(--surface-bg); border: 1px solid var(--surface-border);
+      border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; font-size: 12px;
+    }
+    #stages-panel summary { cursor: pointer; font-weight: 700; color: var(--text-2); list-style: none; display: flex; align-items: center; gap: 6px; }
+    #stages-panel summary::before { content: '▶'; font-size: 9px; transition: transform 0.2s; }
+    #stages-panel[open] summary::before { transform: rotate(90deg); }
+    #stages-panel .stage-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    #stages-panel .stage-pill {
+      padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 600;
+      background: var(--stage-bg); color: var(--stage-text); border: 1px solid var(--surface-border);
+    }
+    #stages-panel p { margin: 10px 0 0; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Admin ── */
+    #admin { margin-top: 40px; border-top: 1px solid var(--card-border); padding-top: 28px; }
+    #admin h2 { color: var(--text-2); font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+    #adminPanel .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+    #adminPanel button { background: var(--stage-bg); border: none; border-radius: 6px; padding: 5px 10px; color: var(--text-2); font-size: 12px; margin-right: 6px; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div id="loading-bar"><div id="loading-bar-fill"></div></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">🧬</div>
+        <div>
+          <h1 class="site-title">Drug Discovery Feed</h1>
+          <p class="site-sub">6 live sources · AI-powered classification<span id="date-range-badge"></span></p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div id="loading-spinner"></div>
+        <span id="status-bar"></span>
+        <button id="themeToggle" title="Toggle light/dark">🌙 Dark</button>
+        <button id="settingsBtn">⚙ API Key <span id="key-status" class="unset">● not set</span></button>
+        <button id="refreshBtn">↺ Refresh</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <div id="settings-panel" class="hidden">
+      <label>Anthropic API Key</label>
+      <div class="row">
+        <input class="inp" type="password" id="apiKeyInput" placeholder="sk-ant-…" autocomplete="off" />
+        <button id="saveKey">Save</button>
+        <button id="clearKey">Clear</button>
+      </div>
+      <p>Stored only in your browser. Without it, keyword heuristics are used.</p>
+    </div>
+
+    <div id="source-bar"></div>
+
+    <div class="filter-row">
+      <select class="inp" id="stageFilter"><option value="">All Stages</option></select>
+      <input  class="inp" id="diseaseFilter" placeholder="🔍  Search disease, keyword…" style="width:230px" />
+      <div class="sig-btns">
+        <button class="sig-btn active" data-sig=""       style="--sig-color:#818cf8">All</button>
+        <button class="sig-btn"        data-sig="High"   style="--sig-color:#4ade80">🟢 High</button>
+        <button class="sig-btn"        data-sig="Medium" style="--sig-color:#fb923c">🟠 Medium</button>
+        <button class="sig-btn"        data-sig="Low"    style="--sig-color:#64748b">⚪ Low</button>
+      </div>
+    </div>
+
+    <details id="sig-legend">
+      <summary>What do High / Medium / Low mean?</summary>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;font-size:13px;color:var(--text-2);line-height:1.6">
+        <div><span style="color:#4ade80;font-weight:700">🟢 High</span> — Major clinical or regulatory milestone: Phase 3 results, FDA approval/decision, breakthrough therapy designation, or a landmark mechanism-of-action paper. Act-on-it news.</div>
+        <div><span style="color:#fb923c;font-weight:700">🟠 Medium</span> — Meaningful progress worth tracking: Phase 1/2 data, new preclinical target validation, notable biomarker findings, or resistance/off-target signals. Monitor closely.</div>
+        <div><span style="color:#64748b;font-weight:700">⚪ Low</span> — Background signal: early-stage research, methods papers, industry reports, or general pipeline updates without specific data readouts. Good for awareness.</div>
+        <p style="margin:8px 0 0;font-size:11px;color:var(--text-muted)">With an API key, Claude classifies each article. Without one, keyword heuristics are used.</p>
+      </div>
+    </details>
+
+    <details id="stages-panel">
+      <summary>What do the Stages mean?</summary>
+      <div class="stage-grid">
+        <span class="stage-pill">🎯 Target ID</span>
+        <span class="stage-pill">🔬 Preclinical</span>
+        <span class="stage-pill">🏥 Clinical</span>
+        <span class="stage-pill">✅ Approval</span>
+        <span class="stage-pill">⚙️ Method</span>
+        <span class="stage-pill">🏭 Industry</span>
+      </div>
+      <p>Stages are applied to <strong>all sources</strong> (news, preprints, and PubMed) by the AI classifier or keyword heuristics — not just PubMed. Every article is assigned a stage based on where it falls in the drug discovery pipeline.</p>
+    </details>
+
+    <div id="stats-bar"></div>
+    <section id="feed"></section>
+
+    <section id="admin" class="hidden">
+      <h2>Professor Review</h2>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="inp" id="adminPassword" type="password" placeholder="Admin password" />
+        <button id="unlockAdmin" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;border-radius:8px;padding:8px 18px;color:#fff;font-size:13px;font-weight:700">Unlock</button>
+      </div>
+      <div id="adminPanel" class="hidden" style="margin-top:16px"></div>
+    </section>
+
+  </div>
+
+  <script>
+    /* ── Theme toggle ── */
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('dd:darkMode');
+    let dark = saved !== 'false';
+    function applyTheme() {
+      html.dataset.theme = dark ? 'dark' : 'light';
+      themeBtn.textContent = dark ? '☀️ Light' : '🌙 Dark';
+      localStorage.setItem('dd:darkMode', dark);
+    }
+    applyTheme();
+    themeBtn.addEventListener('click', () => { dark = !dark; applyTheme(); });
+
+    /* ── Significance filter buttons ── */
+    document.querySelectorAll('.sig-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sig-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window._sigFilter = btn.dataset.sig;
+        window._renderFeed && window._renderFeed();
+      });
+    });
+    window._sigFilter = '';
+
+    /* ── Admin link ── */
+    document.querySelectorAll('a[href="#admin"]').forEach(a =>
+      a.addEventListener('click', () => document.getElementById('admin').classList.remove('hidden'))
+    );
+  </script>
+</body>
+</html>
