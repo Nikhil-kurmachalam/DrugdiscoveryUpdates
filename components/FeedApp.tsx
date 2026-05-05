@@ -733,6 +733,11 @@ export default function FeedApp({ admin = false }: { admin?: boolean }) {
           </div>
         )}
       </div>
+
+      {/* ── Footer ── */}
+      <footer style={{ textAlign: 'center', padding: '28px 20px 36px', fontSize: 12, color: T.textMuted, borderTop: `1px solid ${T.cardBorder}`, marginTop: 40 }}>
+        © 2026 All Rights Reserved &nbsp;·&nbsp; Implemented by <strong style={{ color: T.textSecond }}>Nikhil Kurmachalam</strong> &nbsp;·&nbsp; <span style={{ color: T.textSecond }}>SPARC · UAB</span>
+      </footer>
     </div>
   );
 }
