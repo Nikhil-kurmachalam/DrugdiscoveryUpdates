@@ -1,8 +1,8 @@
 export const LAB_PROMPT = {
-  labFocusAreas: 'GPCR targets in neurodegeneration and oncology',
-  highSignificance: 'Phase 2/3 results, new mechanism papers, FDA decisions',
-  skip: 'Press releases, sponsorships, job listings, non-data opinion pieces',
-  importantSignals: 'resistance mechanisms, off-target effects, failed trials'
+  labFocusAreas:    'drug discovery, target discovery, AI agents for smart drug discovery, and agentic research in biomedical data',
+  highSignificance: 'Phase 2/3 results, novel target validation, FDA decisions, AI/ML breakthroughs in drug discovery, new agentic or LLM-based biomedical research methods',
+  skip:             'Press releases, sponsorships, job listings, non-data opinion pieces',
+  importantSignals: 'resistance mechanisms, off-target effects, failed trials, biomarker findings, AI model limitations in biomedical contexts',
 };
 
 export function buildPrompt(item) {

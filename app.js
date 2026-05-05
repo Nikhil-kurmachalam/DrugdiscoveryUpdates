@@ -52,7 +52,7 @@ const SIG_COLOR  = { High: '#4ade80', Medium: '#fb923c', Low: '#64748b' };
 const SIG_BG     = { High: 'rgba(74,222,128,0.12)', Medium: 'rgba(251,146,60,0.12)', Low: 'rgba(100,116,139,0.10)' };
 const SIG_ICON   = { High: '● ', Medium: '◐ ', Low: '○ ' };
 
-const DRUG_DISC_RE = /drug|target|therap|treatment|clinical|trial|biomarker|compound|molecule|inhibitor|antibody|protein|gene|pathway|mechanism|cancer|tumor|neurodegenera|alzheimer|parkinson|oncology|gpcr|kinase|receptor|preclinical|phase [123]/i;
+const DRUG_DISC_RE = /drug|target|therap|treatment|clinical|trial|biomarker|compound|molecule|inhibitor|antibody|protein|gene|pathway|mechanism|cancer|tumor|neurodegenera|alzheimer|parkinson|oncology|gpcr|kinase|receptor|preclinical|phase [123]|ai agent|large language model|llm|machine learning|deep learning|agentic|foundation model|generative ai|drug design|virtual screening|biomedical ai/i;
 const SKIP_RE      = /sponsor|webinar|job listing|opinion|podcast|advertisement|subscribe|press release/i;
 
 const state = { items: [], srcFilter: '', approved: loadApproved() };
